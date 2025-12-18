@@ -85,11 +85,6 @@ public class InternalAudioRecorder {
                 }
             }
 
-            try {
-                fos.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
             encoder.stop();
             encoder.release();
             audioRecord.stop();

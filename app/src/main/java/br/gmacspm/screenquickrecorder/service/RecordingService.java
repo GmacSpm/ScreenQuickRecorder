@@ -152,18 +152,10 @@ public class RecordingService extends Service {
     }
 
 
-    private String generateFilePath() {
-        // 1. Generate a unique timestamp for the filename
-        String time = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-
-        // 2. Get the primary external storage directory for media (Android/media/myapp/)
-        //    Context.getExternalMediaDirs() returns an array of File objects.
-        //    The first element is usually the primary external storage directory:
-        //    /storage/emulated/0/Android/media/com.your.package.name
+    private String getExternalMediaPath() {
         File[] mediaDirs = getExternalMediaDirs();
         File mediaDir = (mediaDirs != null && mediaDirs.length > 0) ? mediaDirs[0] : null;
 
-        // 3. Define the sub-directory and filename
         if (mediaDir != null) {
             // Create the files sub-directory (leading to Android/media/myapp/files/)
             // Note: The /files part is not explicitly needed as getExternalMediaDirs is for media,
@@ -177,11 +169,12 @@ public class RecordingService extends Service {
 
             // 4. Construct the final file path
             return new File(finalDir, "screenrec_" + time + ".mp4").getAbsolutePath();
+            if (!mediaDir.exists()) {
+                mediaDir.mkdirs();
+            }
+            return mediaDir.getAbsolutePath();
         } else {
-            // Fallback or error handling if external media directory is not available
-            // For a robust app, you might want to log this or throw an exception.
-            // For this example, we'll fall back to the internal files directory as a last resort.
-            return new File(getFilesDir(), "screenrec_" + time + ".mp4").getAbsolutePath();
+            return getFilesDir().getAbsolutePath();
         }
     }
 

@@ -30,7 +30,6 @@ public class MediaMuxerWrapper {
     }
 
     private String getOutputFilePath(String baseDir) {
-        // Garantir que o diretório exista
         File dir = new File(baseDir);
         if (!dir.exists()) {
             dir.mkdirs();

@@ -127,6 +127,9 @@ public class InternalAudioRecorder {
 
             // Você deve adicionar ADTS se quiser salvar como .aac (opcional se você usar MediaMuxer)
             byte[] adts = addADTStoPacket(info.size + 7);
+            if (audioTrackIndex == -1) {
+                audioTrackIndex = muxer.addTrack(audioCodec.getOutputFormat());
+            }
 
             byte[] aacData = new byte[info.size];
             encodedData.get(aacData);
@@ -135,6 +138,10 @@ public class InternalAudioRecorder {
             out.write(aacData);  // dados AAC
 
             muxer.writeSampleData(false, encodedData, info);
+            ByteBuffer encodedData = audioCodec.getOutputBuffer(outIndex);
+            if (encodedData != null) {
+                muxer.writeSampleData(audioTrackIndex, encodedData, info);
+            }
 
             audioCodec.releaseOutputBuffer(outIndex, false);
         }

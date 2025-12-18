@@ -86,16 +86,6 @@ public class InternalAudioRecorder {
             encoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
             encoder.start();
 
-
-            File file = new File(context.getExternalFilesDir(null), "audio_interno.wav");
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(file);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-
-            audioRecord.startRecording();
             byte[] buffer = new byte[4096];
 
             while (isCapturing) {

@@ -88,7 +88,6 @@ public class InternalAudioRecorder {
             encoder.stop();
             encoder.release();
             audioRecord.stop();
-
         });
         captureThread.start();
     }

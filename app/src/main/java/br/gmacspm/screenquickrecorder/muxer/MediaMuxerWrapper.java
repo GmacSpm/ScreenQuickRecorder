@@ -34,13 +34,6 @@ public class MediaMuxerWrapper {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-
-        // Cria um carimbo de data/hora no formato yyyyMMdd_HHmmss
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-
-        // Define o nome do arquivo final
-        String fileName = "GRAVACAO_" + timeStamp + ".mp4";
-
         String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.US).format(new Date());
         String fileName = "recorded_" + timeStamp + ".mp4";
         return baseDir + File.separator + fileName;

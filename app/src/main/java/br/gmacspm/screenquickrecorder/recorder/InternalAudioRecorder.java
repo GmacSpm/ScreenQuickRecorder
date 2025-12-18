@@ -11,7 +11,6 @@ import android.media.projection.MediaProjection;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 import br.gmacspm.screenquickrecorder.muxer.MediaMuxerWrapper;
 

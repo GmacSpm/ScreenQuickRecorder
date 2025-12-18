@@ -1,28 +1,22 @@
 package br.gmacspm.screenquickrecorder.activities;
 
-import android.os.Build;
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-// PermissionActivity.java
 import android.app.Activity;
 import android.content.Intent;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import br.gmacspm.screenquickrecorder.service.RecordingService;
 
 public class PermissionActivity extends Activity {
     private static final int REQUEST_MEDIA_PROJECTION = 1001;
-    private MediaProjectionManager projectionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+        MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
         Intent captureIntent = projectionManager.createScreenCaptureIntent();
         startActivityForResult(captureIntent, REQUEST_MEDIA_PROJECTION);
     }
@@ -35,8 +29,10 @@ public class PermissionActivity extends Activity {
                 Intent serviceIntent = new Intent(this, RecordingService.class);
                 serviceIntent.putExtra(RecordingService.EXTRA_RESULT_CODE, resultCode);
                 serviceIntent.putExtra(RecordingService.EXTRA_RESULT_INTENT, data);
-                startForegroundService(serviceIntent);
-                Toast.makeText(this, "Iniciando gravação...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Gravação em 5 segundos...", Toast.LENGTH_SHORT).show();
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    startForegroundService(serviceIntent);
+                }, 5000);
             } else {
                 Toast.makeText(this, "Permissão de captura de tela negada", Toast.LENGTH_SHORT).show();
             }

@@ -25,6 +25,8 @@ public class InternalAudioRecorder {
     @SuppressLint("MissingPermission")
     public InternalAudioRecorder(Context context, MediaProjection mediaProjection) {
         this.context = context;
+    public InternalAudioRecorder(MediaProjection mediaProjection, MediaMuxerWrapper muxer) {
+        this.muxer = muxer;
 
         AudioPlaybackCaptureConfiguration config =
                 new AudioPlaybackCaptureConfiguration.Builder(mediaProjection)

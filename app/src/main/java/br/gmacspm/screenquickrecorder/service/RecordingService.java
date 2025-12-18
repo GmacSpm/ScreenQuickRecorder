@@ -157,18 +157,6 @@ public class RecordingService extends Service {
         File mediaDir = (mediaDirs != null && mediaDirs.length > 0) ? mediaDirs[0] : null;
 
         if (mediaDir != null) {
-            // Create the files sub-directory (leading to Android/media/myapp/files/)
-            // Note: The /files part is not explicitly needed as getExternalMediaDirs is for media,
-            // but if you want to mirror the structure of getExternalFilesDir(type) you might use a subdirectory.
-            // For simplicity and adherence to standard media location, we'll place it directly inside mediaDir.
-            // However, if you explicitly need a 'files' folder inside 'media', you must create it:
-            // File subDir = new File(mediaDir, "files"); // Use this line if you must have the 'files' folder
-
-            // We'll use the main media directory for the file as it's the intended location for media.
-            File finalDir = mediaDir; // Use 'subDir' if you went with the optional 'files' sub-folder creation
-
-            // 4. Construct the final file path
-            return new File(finalDir, "screenrec_" + time + ".mp4").getAbsolutePath();
             if (!mediaDir.exists()) {
                 mediaDir.mkdirs();
             }

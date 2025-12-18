@@ -34,9 +34,6 @@ public class RecordTileService extends TileService {
             // 2. Definir as flags do PendingIntent
             int flags = PendingIntent.FLAG_UPDATE_CURRENT;
             // Adiciona FLAG_IMMUTABLE, exigido pelo Android S (API 31) e superior
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // M = Marshmallow (API 23), bom ponto de partida
-                flags |= PendingIntent.FLAG_IMMUTABLE;
-            }
             // M = Marshmallow (API 23), bom ponto de partida
             flags |= PendingIntent.FLAG_IMMUTABLE;
 

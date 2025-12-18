@@ -137,6 +137,11 @@ public class RecordingService extends Service {
         String action = intent.getAction();
         int resultCode = intent.getIntExtra(EXTRA_RESULT_CODE, Activity.RESULT_OK);
         Intent data = intent.getParcelableExtra(EXTRA_RESULT_INTENT);
+        if ("com.example.app.ACTION_STOP_RECORDING".equals(action)) {
+            stopRecording();
+            return START_NOT_STICKY;
+        }
+
         if (resultCode == Activity.RESULT_OK) {
 
             MediaProjectionManager pm =

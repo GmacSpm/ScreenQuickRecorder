@@ -41,6 +41,8 @@ public class MediaMuxerWrapper {
         // Define o nome do arquivo final
         String fileName = "GRAVACAO_" + timeStamp + ".mp4";
 
+        String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.US).format(new Date());
+        String fileName = "recorded_" + timeStamp + ".mp4";
         return baseDir + File.separator + fileName;
     }
 
@@ -121,8 +123,6 @@ public class MediaMuxerWrapper {
                 Log.e(TAG, "Erro ao parar o MediaMuxer.", e);
             } finally {
                 mediaMuxer.release();
-                videoTrackIndex = -1;
-                audioTrackIndex = -1;
                 isMuxerStarted = false;
                 Log.i(TAG, "MediaMuxer liberado.");
             }

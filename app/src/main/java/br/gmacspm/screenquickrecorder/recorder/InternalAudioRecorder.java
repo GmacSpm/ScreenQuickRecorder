@@ -66,7 +66,7 @@ public class InternalAudioRecorder {
             );
             format.setInteger(MediaFormat.KEY_AAC_PROFILE,
                     MediaCodecInfo.CodecProfileLevel.AACObjectLC);
-            format.setInteger(MediaFormat.KEY_BIT_RATE, 128000);  // 128 kbps
+            format.setInteger(MediaFormat.KEY_BIT_RATE, 128000);
             format.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, 16384);
 
             try {

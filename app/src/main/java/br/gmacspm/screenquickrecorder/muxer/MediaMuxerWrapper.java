@@ -3,8 +3,7 @@ package br.gmacspm.screenquickrecorder.muxer;
 import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
-import android.os.Environment;
-import android.util.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -12,16 +11,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.util.Log;
+
 public class MediaMuxerWrapper {
 
     private static final String TAG = "MediaMuxerWrapper";
 
     private final MediaMuxer mediaMuxer;
-    private int videoTrackIndex = -1;
-    private int audioTrackIndex = -1;
     private boolean isMuxerStarted = false;
     private int trackCount = 0;
-    private final int MAX_TRACKS = 2;
+    private final int EXPECTED_TRACKS = 2; // Vídeo e Áudio
 
     public MediaMuxerWrapper(String baseDir) throws IOException {
         String fullPath = getOutputFilePath(baseDir);
@@ -39,62 +38,28 @@ public class MediaMuxerWrapper {
         return baseDir + File.separator + fileName;
     }
 
-    // --- Métodos de Adição de Faixa ---
-
-    /**
-     * Adiciona a faixa de vídeo. Deve ser chamada pela thread do Encoder de Vídeo.
-     */
-    public synchronized void addVideoTrack(MediaFormat format) {
-        if (isMuxerStarted) return;
-
-        videoTrackIndex = mediaMuxer.addTrack(format);
+    public synchronized int addTrack(MediaFormat format) {
+        if (isMuxerStarted) {
+            return -1;
+        }
+        int trackIndex = mediaMuxer.addTrack(format);
         trackCount++;
-        Log.i(TAG, "Faixa de vídeo adicionada com índice: " + videoTrackIndex);
-        attemptMuxerStart();
-    }
-
-    /**
-     * Adiciona a faixa de áudio. Deve ser chamada pela thread do Encoder de Áudio.
-     */
-    public synchronized void addAudioTrack(MediaFormat format) {
-        if (isMuxerStarted) return;
-
-        audioTrackIndex = mediaMuxer.addTrack(format);
-        trackCount++;
-        Log.i(TAG, "Faixa de áudio adicionada com índice: " + audioTrackIndex);
-        attemptMuxerStart();
-    }
-
-    /**
-     * Inicia o MediaMuxer se ambas as faixas (Vídeo e Áudio) já tiverem sido adicionadas.
-     */
-    private synchronized void attemptMuxerStart() {
-        if (trackCount == MAX_TRACKS && !isMuxerStarted) {
+        Log.i(TAG, "Trilha adicionada com índice: " + trackIndex);
+        if (trackCount == EXPECTED_TRACKS) {
             mediaMuxer.start();
             isMuxerStarted = true;
-            Log.i(TAG, "MediaMuxer **INICIADO** (Vídeo e Áudio prontos para escrita).");
+            Log.i(TAG, "MediaMuxer **INICIADO**.");
         }
+        return trackIndex;
     }
 
-    // --- Método Principal de Escrita (Recebe os Bytes) ---
-
-    /**
-     * Escreve os dados codificados (bytes de Vídeo ou Áudio) no MediaMuxer.
-     * Este é o método onde os bytes codificados do MediaCodec são passados para o Muxer.
-     * * @param isVideo Indica se o buffer é de Vídeo (true) ou Áudio (false).
-     * @param encodedData O ByteBuffer contendo os dados codificados.
-     * @param bufferInfo Metadados do buffer, incluindo presentationTimeUs.
-     */
-    public synchronized void writeSampleData(boolean isVideo, ByteBuffer encodedData, MediaCodec.BufferInfo bufferInfo) {
+    public synchronized void writeSampleData(int trackIndex, ByteBuffer encodedData, MediaCodec.BufferInfo bufferInfo) {
         if (!isMuxerStarted) {
             return;
         }
-
-        int trackIndex = isVideo ? videoTrackIndex : audioTrackIndex;
-
-        if (trackIndex < 0) return;
-
-        // Tratar dados de configuração
+        if (trackIndex < 0) {
+            return;
+        }
         if ((bufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
             bufferInfo.size = 0;
         }

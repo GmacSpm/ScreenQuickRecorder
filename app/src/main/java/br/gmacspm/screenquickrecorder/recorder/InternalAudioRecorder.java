@@ -14,11 +14,12 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class InternalAudioRecorder {
-
-    private final Context context;
     private AudioRecord audioRecord;
     private boolean isCapturing = false;
     private Thread captureThread;
+    private final MediaMuxerWrapper muxer;
+    private MediaCodec encoder;
+    private int audioTrackIndex = -1;
 
     @SuppressLint("MissingPermission")
     public InternalAudioRecorder(Context context, MediaProjection mediaProjection) {
@@ -123,7 +124,6 @@ public class InternalAudioRecorder {
         isCapturing = false;
 
         if (captureThread != null) {
-            captureThread.interrupt();
             try {
                 captureThread.join();
             } catch (InterruptedException e) {

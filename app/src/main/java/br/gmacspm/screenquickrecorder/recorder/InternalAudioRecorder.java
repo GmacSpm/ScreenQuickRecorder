@@ -101,12 +101,7 @@ public class InternalAudioRecorder {
             while (isCapturing) {
                 int read = audioRecord.read(buffer, 0, buffer.length);
                 if (read > 0) {
-                    byte[] data = Arrays.copyOf(buffer, read);
-                    try {
-                        encodePCMtoAAC(encoder, data, fos);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    drainEncoder(encoder, buffer);
                 }
             }
 

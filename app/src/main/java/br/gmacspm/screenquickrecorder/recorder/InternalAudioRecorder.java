@@ -22,9 +22,6 @@ public class InternalAudioRecorder {
     private MediaCodec encoder;
     private int audioTrackIndex = -1;
 
-    @SuppressLint("MissingPermission")
-    public InternalAudioRecorder(Context context, MediaProjection mediaProjection) {
-        this.context = context;
     public InternalAudioRecorder(MediaProjection mediaProjection, MediaMuxerWrapper muxer) {
         this.muxer = muxer;
 
@@ -52,7 +49,6 @@ public class InternalAudioRecorder {
                 .setBufferSizeInBytes(bufferSize)
                 .setAudioPlaybackCaptureConfig(config)
                 .build();
-
     }
 
     public void startInternalAudioCapture() {

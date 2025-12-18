@@ -74,6 +74,19 @@ public class RecordingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        screenReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+                    onScreenOff();
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(screenReceiver, filter);
+
         projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -89,6 +102,9 @@ public class RecordingService extends Service {
         startForeground(NOTIF_ID, buildNotification("Gravando tela..."));
     }
 
+    private void onScreenOff() {
+        stopRecording();
+    }
 
     private void startRecording() {
         if (mediaProjection == null) return;
@@ -171,6 +187,8 @@ public class RecordingService extends Service {
 
     @Override
     public void onDestroy() {
+        unregisterReceiver(screenReceiver);
+        recording = false;
         super.onDestroy();
         recording = false;
     }

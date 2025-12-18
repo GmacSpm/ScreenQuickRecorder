@@ -108,11 +108,7 @@ public class InternalAudioRecorder {
         captureThread.start();
     }
 
-    void encodePCMtoAAC(MediaCodec audioCodec, byte[] pcm, FileOutputStream out) throws IOException {
-        ByteBuffer[] inputBuffers = audioCodec.getInputBuffers();
-        ByteBuffer[] outputBuffers = audioCodec.getOutputBuffers();
-
-        // ---- INPUT (PCM) ----
+    void drainEncoder(MediaCodec audioCodec, byte[] pcm) {
         int inIndex = audioCodec.dequeueInputBuffer(10000);
         if (inIndex >= 0) {
             ByteBuffer buffer = inputBuffers[inIndex];

@@ -124,6 +124,11 @@ public class InternalAudioRecorder {
 
         if (captureThread != null) {
             captureThread.interrupt();
+            try {
+                captureThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             captureThread = null;
         }
 

@@ -117,7 +117,6 @@ public class InternalAudioRecorder {
             audioCodec.queueInputBuffer(inIndex, 0, pcm.length, System.nanoTime() / 1000, 0);
         }
 
-        // ---- OUTPUT (AAC) ----
         MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
         int outIndex;
 

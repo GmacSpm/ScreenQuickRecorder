@@ -97,7 +97,7 @@ public class InternalAudioRecorder {
     void drainEncoder(MediaCodec audioCodec, byte[] pcm) {
         int inIndex = audioCodec.dequeueInputBuffer(10000);
         if (inIndex >= 0) {
-            ByteBuffer buffer = inputBuffers[inIndex];
+            ByteBuffer buffer = audioCodec.getInputBuffer(inIndex);
             buffer.clear();
             buffer.put(pcm);
             audioCodec.queueInputBuffer(inIndex, 0, pcm.length, System.nanoTime() / 1000, 0);

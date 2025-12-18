@@ -37,6 +37,8 @@ public class RecordTileService extends TileService {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // M = Marshmallow (API 23), bom ponto de partida
                 flags |= PendingIntent.FLAG_IMMUTABLE;
             }
+            // M = Marshmallow (API 23), bom ponto de partida
+            flags |= PendingIntent.FLAG_IMMUTABLE;
 
             // 3. Criar o PendingIntent
             PendingIntent pendingIntent = PendingIntent.getActivity(

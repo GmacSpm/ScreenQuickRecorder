@@ -29,7 +29,6 @@ public class InternalAudioRecorder {
     public InternalAudioRecorder(Context context, MediaProjection mediaProjection) {
         this.context = context;
 
-        // 1) Configuração para capturar áudio interno
         AudioPlaybackCaptureConfiguration config =
                 new AudioPlaybackCaptureConfiguration.Builder(mediaProjection)
                         .addMatchingUsage(AudioAttributes.USAGE_MEDIA)
@@ -37,7 +36,6 @@ public class InternalAudioRecorder {
                         .addMatchingUsage(AudioAttributes.USAGE_UNKNOWN)
                         .build();
 
-        // 2) Formato do áudio PCM
         AudioFormat audioFormat = new AudioFormat.Builder()
                 .setSampleRate(44100)
                 .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
@@ -50,7 +48,6 @@ public class InternalAudioRecorder {
                 AudioFormat.ENCODING_PCM_16BIT
         );
 
-        // 3) Instancia o AudioRecord com captura interna
         audioRecord = new AudioRecord.Builder()
                 .setAudioFormat(audioFormat)
                 .setBufferSizeInBytes(bufferSize)
